@@ -195,6 +195,9 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 		var i=0;
 		var cantidadCapasVisibles = this.map.layers.length; 
         var inter =0;
+		
+		var lugares = new Array();
+		//var datosLugares = Array(3);
 		for(i=0;i<cantidadCapasVisibles;i++){
 			if(this.map.layers[i].CLASS_NAME=="OpenLayers.Layer.WMS" && this.map.layers[i].visibility){
 		 // Recupera los datos de la capa en cuestion	
@@ -203,7 +206,10 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 		//	Para cada capa visible busca la interseccion con el buffer
 		    for (var j=0; j<arregloWfs.length; j++) {
 				if(this.verIntersecciones(arregloWfs[j][1],bufferInterseccion.responseText)){
-					
+					var datosLugares = new Array(1);
+					datosLugares[0]= arregloWfs[j][0];
+					datosLugares[1]= arregloWfs[j][1];
+					lugares.push(datosLugares);
 					
 				//	alert(arregloWfs[j][0] + arregloWfs[j][1]);
 					
@@ -213,38 +219,72 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 			
 											}
 									}
-									
-							
+	
+    // create the data store
+    var store = new Ext.data.ArrayStore({
+        fields: [
+           {name: 'lugar'},
+		   {name: 'punto'}
+        ]
+    });
 
-   var panel = new Ext.Window({
+    // manually load local data
+    store.loadData(lugares);
+
+    // create the Grid
+    var grid = new Ext.grid.GridPanel({
+        store: store,
+		
+        
+        columns: [
+            {
+                id       :'lugar',
+                header   : 'Lugar', 
+                width    : 80, 
+				height: 100,
+                sortable : true, 
+                dataIndex: 'lugar'
+            },
+            {
+                xtype: 'actioncolumn',
+				header   : 'Acciones',
+                width: 85,
+                items: [{
+                    icon   : './verRuta.png',  // Use a URL in the icon config
+                    tooltip: 'Click para ver la ruta...',
+                    handler: function(grid, rowIndex,mapaMio,directionsDisplay,panel) {
+                        //dibujaRuta(p,grid.store.data.items[rowIndex].data.punto);
+						//panel.close;
+					//	alert("Entroo");
+                    }
+                }]
+            }
+        ],
+		
+        stripeRows: true,
+        autoExpandColumn: 'lugar',
+        height: 400,
+        width: 500
+    });
+	
+	// grid.render(Ext.getBody());
+	
+	/**Hasta acaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*/
+
+		this.panel = new Ext.Window({
 	   
 		title: "Lugares Cercanos a Usted",
         height: 400,
-        width: 600,
-		collapsible: false,
-		maximizable: false,
-		animCollapse: false,
-		dockedItems: [{
-            xtype: 'toolbar',
-            dock: 'bottom',
-            ui: 'footer',
-            layout: {
-                pack: 'center'
-            },
-            items: [{
-                minWidth: 80,
-                text: 'Send'
-            },{
-                minWidth: 80,
-                text: 'Cancel'
-            }]
-        }]
-						});
+        width: 500,
+		collapsible: true,
+		maximizable: true,
+		animCollapse: true,
+		items: grid
+				});
 						
 						
-		panel.show();
+		this.panel.show();
 
-  
 
 						
 									
