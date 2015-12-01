@@ -213,13 +213,13 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 					
 				//	alert(arregloWfs[j][0] + arregloWfs[j][1]);
 					
-					//this.dibujaRuta(p,arregloWfs[j][1]);
+					this.dibujaRuta(p,arregloWfs[j][1]);
 																							}
 													}
 			
 											}
 									}
-	
+	/*
     // create the data store
     var store = new Ext.data.ArrayStore({
         fields: [
@@ -228,7 +228,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
         ]
     });
 
-    // manually load local data
+   /* // manually load local data
     store.loadData(lugares);
 
     // create the Grid
@@ -270,7 +270,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 	// grid.render(Ext.getBody());
 	
 	/**Hasta acaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*/
-
+/*
 		this.panel = new Ext.Window({
 	   
 		title: "Lugares Cercanos a Usted",
@@ -283,7 +283,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 				});
 						
 						
-		this.panel.show();
+		this.panel.show(); */
 
 
 						
