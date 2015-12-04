@@ -213,13 +213,14 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 					
 				//	alert(arregloWfs[j][0] + arregloWfs[j][1]);
 					
-					//this.dibujaRuta(p,arregloWfs[j][1]);
+					this.dibujaRuta(p,arregloWfs[j][1]);
 																							}
 													}
 			
 											}
 									}
 	
+	/*
     // create the data store
     var store = new Ext.data.ArrayStore({
         fields: [
@@ -270,7 +271,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 	// grid.render(Ext.getBody());
 	
 	/**Hasta acaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*/
-
+/*
 		this.panel = new Ext.Window({
 	   
 		title: "Lugares Cercanos a Usted",
@@ -285,7 +286,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 						
 		this.panel.show();
 
-
+*/
 						
 									
 		/** UNA VEZ CALCULADOS TODOS LOS PUNTOS QUE SE INTERSECAN CON EL BUFFER, SE DEBERIA MOSTRAR POR POPUP
@@ -321,9 +322,9 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 							
 
 	this.directionsService.route({
-		origin: p1,
-		destination: p2,
-		travelMode: google.maps.TravelMode.TRANSIT},
+		origin: origen,
+		destination: destino,
+		travelMode: google.maps.TravelMode.WALKING},
 			function(response, status) {
 				if (status == google.maps.DirectionsStatus.OK) {
 					 directionsDisplay.setDirections(response);
@@ -335,7 +336,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 	                     Proj4js.defs["EPSG:4326"] = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
 	                     var destinoUnico = new Proj4js.Proj('EPSG:4326');
 						 
-						 var puntoCentro = new Proj4js.Point(directionsDisplay.A.D[0].location.F,directionsDisplay.A.D[0].location.A);
+						 var puntoCentro = new Proj4js.Point(directionsDisplay.map.center.K,directionsDisplay.map.center.G);
 						 
 						 //Reproyecta los puntos
 						 Proj4js.transform(destinoUnico, origen1, puntoCentro);
@@ -344,7 +345,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 						 //Crea un punto donde va a centrar el mapa una vez que dibuje la ruta
 						 var pixel = new OpenLayers.LonLat(puntoCentro.x,puntoCentro.y);
 						 //Centra el mapa al punto especificado
-						 this.app.mapPanel.map.moveTo(pixel,14,true);}, '700');
+						 this.app.mapPanel.map.moveTo(pixel,14,true);},'700');
 					 		
 					 					 					 
 					} else {

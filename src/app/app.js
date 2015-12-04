@@ -147,7 +147,7 @@
         layers: [
 			{	
             source: "google",
-            name: "ROADMAP",
+            name: "SATELLITE",
             group: "background"
         },  {
             // Capa Vector para mostrar nuestras geometrias y los resultados del procesamiento
