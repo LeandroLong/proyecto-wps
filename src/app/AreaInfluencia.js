@@ -219,7 +219,10 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 			
 											}
 									}
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 4ce4ce5f02f090894fadabd947f6ae2008c96e72
 	/*
     // create the data store
     var store = new Ext.data.ArrayStore({
@@ -229,7 +232,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
         ]
     });
 
-    // manually load local data
+   /* // manually load local data
     store.loadData(lugares);
 
     // create the Grid
@@ -284,7 +287,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 				});
 						
 						
-		this.panel.show();
+		this.panel.show(); */
 
 */
 						
