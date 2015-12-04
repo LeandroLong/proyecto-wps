@@ -211,19 +211,14 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 					datosLugares[1]= arregloWfs[j][1];
 					lugares.push(datosLugares);
 					
-				//	alert(arregloWfs[j][0] + arregloWfs[j][1]);
-					
-					this.dibujaRuta(p,arregloWfs[j][1]);
+					//this.dibujaRuta(p,arregloWfs[j][1]);
 																							}
 													}
 			
 											}
 									}
-<<<<<<< HEAD
+
 	
-=======
->>>>>>> 4ce4ce5f02f090894fadabd947f6ae2008c96e72
-	/*
     // create the data store
     var store = new Ext.data.ArrayStore({
         fields: [
@@ -232,7 +227,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
         ]
     });
 
-   /* // manually load local data
+    // manually load local data
     store.loadData(lugares);
 
     // create the Grid
@@ -255,15 +250,17 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
                 width: 85,
                 items: [{
                     icon   : './verRuta.png',  // Use a URL in the icon config
-                    tooltip: 'Click para ver la ruta...',
-                    handler: function(grid, rowIndex,mapaMio,directionsDisplay,panel) {
-                        //dibujaRuta(p,grid.store.data.items[rowIndex].data.punto);
-						//panel.close;
-					//	alert("Entroo");
-                    }
+                    tooltip: 'Click para ver la ruta...'
                 }]
             }
         ],
+		listeners: {
+					cellclick: function(dv, record, item, index, e) {
+					this.dibujaRuta(p,dv.initialConfig.store.data.items[record].json[1]);	
+					this.panel.close();
+					},
+					scope: this
+			},
 		
         stripeRows: true,
         autoExpandColumn: 'lugar',
@@ -271,10 +268,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
         width: 500
     });
 	
-	// grid.render(Ext.getBody());
 	
-	/**Hasta acaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*/
-/*
 		this.panel = new Ext.Window({
 	   
 		title: "Lugares Cercanos a Usted",
@@ -287,15 +281,17 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 				});
 						
 						
-		this.panel.show(); */
+		this.panel.show(); 
 
-*/
+
 						
 									
 		/** UNA VEZ CALCULADOS TODOS LOS PUNTOS QUE SE INTERSECAN CON EL BUFFER, SE DEBERIA MOSTRAR POR POPUP
 		    DICHOS PUNTOS Y DEJAR QUE EL USUARIO ELIJA ALGUN PUNTO Y DAR LA OPCION DE CALCULAR LA RUTA*/							
 		
 		},
+	
+	/** Funcion que recibe un punto de origen y un punto de destino para dibujar la ruta en Google Maps*/
 	
 	dibujaRuta: function(pOrigen,pDest) { 	
 	
@@ -323,7 +319,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 	var p1 = new google.maps.LatLng(puntoOrigen.y, puntoOrigen.x);
 	var p2 = new google.maps.LatLng(puntoDestino.y, puntoDestino.x);
 							
-
+    // Los puntos deberan estar en EPSG: 4326 para que sean pasados por parametros a los servicios de Google Maps
 	this.directionsService.route({
 		origin: origen,
 		destination: destino,
