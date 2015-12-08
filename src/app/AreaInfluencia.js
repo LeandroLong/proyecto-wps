@@ -82,7 +82,8 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 						triggerAction: 'all',
 						mode: 'local',
 						width: 80,
-						forceSelection: true
+						forceSelection: true,
+						valueField: "lea"
 					});
 			
 			this.addOutput(combo);
@@ -117,6 +118,12 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 		var puntoBuffer="POINT("+p.x+" "+""+p.y+")";
 		
 	 //	Recupera el rango seleccionado por el usuario
+	 
+		if(!this.output[0].lastSelectionText){
+			
+			alert("ATENCIÓN: Debe elegir un rango de influencia");
+			return 0;
+		}
 	 
 	   var rango = this.output[0].lastSelectionText;
 	   var valor = parseInt(rango.split(" ",1));
