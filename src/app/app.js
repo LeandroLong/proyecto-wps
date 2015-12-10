@@ -149,6 +149,13 @@
             name: "Idesf:comisarias",
 			selected: true,
 			visibility: true
+        },
+		{
+            // Capa calles   ---   Son capas SHP
+            source: "local",
+            name: "Idesf:escuelas",
+			selected: false,
+			visibility: false
         }],
         items: [{
             xtype: "gx_zoomslider",
