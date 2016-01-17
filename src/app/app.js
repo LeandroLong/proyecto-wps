@@ -7,32 +7,21 @@
  * @require plugins/OSMSource.js
  * @require plugins/WMSCSource.js
  * @require plugins/ZoomToExtent.js
- * @require plugins/NavigationHistory.js
  * @require plugins/Zoom.js
- * @require plugins/AddLayers.js
- * @require plugins/RemoveLayer.js
  * @require OpenLayers/Layer/Vector.js
  * @require OpenLayers/Renderer/Canvas.js
- * @require OpenLayers/Renderer/VML.js
  * @require GeoExt/widgets/ZoomSlider.js
- * @require RowExpander.js
  * @require plugins/GoogleSource.js
- * @require BuscaIntersecciones.js
- * @require WPSDemoDePrueba.js
- * @require AreaInfluencia.js
  * @require plugins/WMSGetFeatureInfo.js
- * @require plugins/GoogleGeocoder.js
- * @require plugins/FeatureGrid.js
- * @require plugins/FeatureManager.js
- * @require plugins/SnappingAgent.js
- * @require plugins/FeatureEditor.js
  * @require MostrarMenu.js
- * @require plugins/Legend.js
+ * @require DondeEstoy.js
+ * @require MiArbol.js
+ * @require PuntoSeleccionado.js
  */
 
+
  
- 
- var app = new gxp.Viewer({
+    var app = new gxp.Viewer({
     portalConfig: {
         layout: "border",
         region: "center",
@@ -41,11 +30,19 @@
         // and save a wrapping container
         items: [{
             id: "panelsuperior",
-            xtype: "container",
-            layout: "fit",
+            xtype: "panel",
+            layout: "absolute",
             region: "north",
             border: false,
-			height: 97
+			width: "100%",
+			html:"<a href='https://www.santafe.gov.ar/idesf'><img src='src/app/imagenes/encabezado-left.png' height='60px' width='25%' style='float: left; padding: 5px'/></a>" +
+            "<div style='float: left; font:normal bold 30px Arial; margin: 6px;'></div>"+
+			"<a href='http://www.santafe.gov.ar'><img src='src/app/imagenes/header-logo.gif' height='60px' width='15%' style='float: right; padding: 5px'/></a>" +
+            "<div float='align: right; font:normal bold 30px Arial; margin: 6px;'></div>"+
+            "<div style='padding-left:11px;width:100%;float:left;margin-top: 2px solid #fff; background-color:#D30A1D;font:normal 18px Arial;color:#FFFFFF; text-align:left'>Geoprocesamiento de Mapas</div>",
+
+			bodyCfg: {style:'background-color:#FFFFFF'}
+			
         },{
             id: "panelcentral",
             xtype: "panel",
@@ -54,49 +51,45 @@
             border: 1,
             items: ["mymap"]
         }, {
-    id: "paneleste",
-    xtype: "container",
-    layout: "vbox",
-    region: "west",
-    width: 270,
-    defaults: {
-        width: "100%",
-        layout: "fit"
-    },
-    items: [{
-        title: "Arbol de Capas",
-        id: "arbolCapas",
-        border: false,
-        flex: 1
-    }, {
-		title: "Lugares cercanos a Usted",
-        id: "lugaresCercanos",
-        height: 270,
-		hidden: true,
-		outputTarget: "lugaresCercanos"
-    }]
+			id: "paneleste",
+			xtype: "container",
+			layout: "vbox",
+			region: "west",
+			width: 270,
+			defaults: {
+				width: "100%",
+				layout: "fit"
+			},
+			items: [{
+				title: "Arbol de Capas",
+				id: "arbolCapas",
+				border: false,
+				flex: 1
+				}, {
+				title: "Lugares cercanos a Usted",
+				id: "lugaresCercanos",
+				height: 320,
+				hidden: true,
+				outputTarget: "lugaresCercanos"
+					}]
 			}],
         bbar: {id: "mybbar"}
     },
     
     // configuration of all tool plugins for this application
     tools: [{
-        ptype: "gxp_layertree",
+        ptype: "gxp_miarbol",
         outputConfig: {
             id: "tree",
             border: true,
             tbar: [] // Los botones se agregaran en "tree.bbar" posteriormente
         },
         outputTarget: "arbolCapas"
-    }, {
-        ptype: "gxp_addlayers",
-        actionTarget: "tree.tbar"
-    }, {
-        ptype: "gxp_removelayer",
-        actionTarget: ["tree.tbar", "tree.contextMenu"]
     },
-	{ ptype: "app_areainfluencia",outputTarget: "map.tbar"},
-	{ ptype: "app_mostrarmenu", outputTarget: "lugaresCercanos"}
+	
+	{ ptype: "app_dondeestoy",outputTarget: "map.tbar"}
+	
+
 	],
     
     // layer sources
@@ -105,10 +98,7 @@
             ptype: "gxp_wmscsource",
             url: "/geoserver/wms",
             version: "1.1.1"
-        },
-        osm: {
-            ptype: "gxp_osmsource"
-        },
+        },        
 		google: {
 			ptype: "gxp_googlesource"
 } ,
@@ -118,35 +108,55 @@
     // map and layers
     map: {
         id: "mymap", // id needed to reference map in portalConfig above
-        title: "Mapa",
+       
         projection: "EPSG:900913",
         center: [-6755000.758211, -3715572.3184791],
         zoom: 12,
         layers: [
 			{	
             source: "google",
-            name: "SATELLITE",
+            name: "ROADMAP",
             group: "background"
         }, 
 		{
             // Capa Vector para mostrar nuestras geometrias y los resultados del procesamiento
             source: "ol",
             name: "sketch",
-            type: "OpenLayers.Layer.Vector",
+			type: "OpenLayers.Layer.Vector",
 			selected: true,
-			projection: "EPSG:4326"
+			projection: "EPSG:4326",
+			args: ["Area de Influencia"]
         },
+		
 		{
-            // Capa calles    ---   Son capas SHP
+            // Capa calles   ---   Son capas SHP
             source: "local",
-            name: "Idesf:hospitales",
+            name: "Idesf:bomberoszapadores",
+			title: "Bomberos Zapadores",
 			selected: false,
 			visibility: false
         },
 		{
             // Capa calles   ---   Son capas SHP
             source: "local",
+            name: "Idesf:bomberosvoluntarios",
+			title: "Bomberos Voluntarios",
+			selected: false,
+			visibility: false
+        },
+		{
+            // Capa calles    ---   Son capas SHP
+            source: "local",
+            name: "Idesf:hospitales",
+			title: "Hospitales",
+			selected: true,
+			visibility: true
+        },
+		{
+            // Capa calles   ---   Son capas SHP
+            source: "local",
             name: "Idesf:comisarias",
+			title: "Comisarias",
 			selected: true,
 			visibility: true
         },
@@ -154,9 +164,11 @@
             // Capa calles   ---   Son capas SHP
             source: "local",
             name: "Idesf:escuelas",
+			title: "Escuelas",
 			selected: false,
 			visibility: false
-        }],
+        }
+		],
         items: [{
             xtype: "gx_zoomslider",
             vertical: true,
@@ -164,4 +176,4 @@
         }]
     }
 
-});
+}); 

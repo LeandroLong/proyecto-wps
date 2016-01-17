@@ -56,9 +56,22 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 			// Inicio de agregacion de ACCIONES
             this.addActions([
 			
+			new GeoExt.Action(Ext.apply({
+                    text: 'Donde Estoy?',
+					handler: this.muestraMenu.createDelegate(this),
+                    control: new OpenLayers.Control.DrawFeature(
+                        this.layer,OpenLayers.Handler.Point, {
+                        eventListeners: {
+                            featureadded: this.buffer,
+                            scope: this
+                        }
+                    })
+                }, actionDefaults))	,
+			
+			
 			//Acción para la probar WFS
                     new GeoExt.Action(Ext.apply({
-                    text: 'Area de Influencia: ',
+                    text: 'Area de Influencia',
 					handler: this.muestraMenu.createDelegate(this),
                     control: new OpenLayers.Control.DrawFeature(
                         this.layer,OpenLayers.Handler.Point, {
@@ -83,9 +96,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 						mode: 'local',
 						width: 80,
 						forceSelection: true,
-						valueField: "lea"
 					});
-			
 			this.addOutput(combo);
         }, this);
     },
@@ -98,9 +109,8 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 			this.layer.removeFeatures(this.layer.features[z]);
 		}	
 	   
-		
-		
-		var wpsFormat= new OpenLayers.Format.WPSExecute(); 
+	   
+	  	var wpsFormat= new OpenLayers.Format.WPSExecute(); 
 		var posicion= new OpenLayers.Format.WKT();		    
 		var p = new Proj4js.Point(evt.feature.geometry.x,evt.feature.geometry.y);
 	
@@ -216,7 +226,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 		for(i=0;i<cantidadCapasVisibles;i++){
 			if(this.map.layers[i].CLASS_NAME=="OpenLayers.Layer.WMS" && this.map.layers[i].visibility){
 		 // Recupera los datos de la capa en cuestion	
-			var arregloWfs = this.wfs(this.map.layers[i].name);
+			var arregloWfs = this.wfs(this.map.layers[i].params.LAYERS);
 		
 		//	Para cada capa visible busca la interseccion con el buffer
 		    for (var j=0; j<arregloWfs.length; j++) {
@@ -381,7 +391,7 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 		    var respuesta = OpenLayers.Request.GET({
                     url: "geoserver/wfs",
                     params: {
-                            typeName: "Idesf:"+evt,
+                            typeName: evt,
                             service: "WFS",
                             version: "1.1.0",
                             outputFormat: "JSON", // Usamos JSON para que la respuesta sea mas rapida
@@ -446,12 +456,6 @@ var AreaInfluenciaBuffer = Ext.extend(gxp.plugins.Tool, {
 			lugar.hide();
 			arbol.ownerCt.doLayout();
 		}
-		
-		
-		
-		
-       
-	
 	}
 
 });

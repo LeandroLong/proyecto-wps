@@ -1,10 +1,5 @@
 
 
-
-
-
-
-
 var MostrarMenu=Ext.extend(gxp.plugins.Tool,{
 	
 	ptype:"app_mostrarmenu",
@@ -27,7 +22,12 @@ var MostrarMenu=Ext.extend(gxp.plugins.Tool,{
 	addOutput:function(a){
 			
 					
-	MostrarMenu.superclass.addOutput.call(this,a)}
+	MostrarMenu.superclass.addOutput.call(this,a)},
+		
+	removeOutput:function(){
+			
+					
+	MostrarMenu.superclass.removeOutput.call(this)}	
 		
 		});
 
