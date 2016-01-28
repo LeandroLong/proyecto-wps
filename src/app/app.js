@@ -13,10 +13,9 @@
  * @require GeoExt/widgets/ZoomSlider.js
  * @require plugins/GoogleSource.js
  * @require plugins/WMSGetFeatureInfo.js
- * @require MostrarMenu.js
+ * @require MostrarMenuLugares.js
+ * @require MostrarMenuStep.js
  * @require DondeEstoy.js
- * @require MiArbol.js
- * @require PuntoSeleccionado.js
  */
 
 
@@ -37,9 +36,9 @@
 			width: "100%",
 			html:"<a href='https://www.santafe.gov.ar/idesf'><img src='src/app/imagenes/encabezado-left.png' height='60px' width='25%' style='float: left; padding: 5px'/></a>" +
             "<div style='float: left; font:normal bold 30px Arial; margin: 6px;'></div>"+
-			"<a href='http://www.santafe.gov.ar'><img src='src/app/imagenes/header-logo.gif' height='60px' width='15%' style='float: right; padding: 5px'/></a>" +
+			"<a href='http://www.santafe.gov.ar'><img src='src/app/imagenes/header-logo.gif' height='60px' width='12%' style='float: right; padding: 5px'/></a>" +
             "<div float='align: right; font:normal bold 30px Arial; margin: 6px;'></div>"+
-            "<div style='padding-left:11px;width:100%;float:left;margin-top: 2px solid #fff; background-color:#D30A1D;font:normal 18px Arial;color:#FFFFFF; text-align:left'>Geoprocesamiento de Mapas</div>",
+            "<div style='padding-left:11px;width:100%;float:left;margin-top: -1px; background-color:#D30A1D;font:normal 18px Arial;color:#FFFFFF; text-align:left'>Geoprocesamiento de Mapas</div>",
 
 			bodyCfg: {style:'background-color:#FFFFFF'}
 			
@@ -48,37 +47,54 @@
             xtype: "panel",
             layout: "fit",
             region: "center",
-            border: 1,
             items: ["mymap"]
         }, {
 			id: "paneleste",
-			xtype: "container",
-			layout: "vbox",
+			title: "Arbol de Capas",
+			xtype: "panel",
 			region: "west",
+			split: 'true',
+			plain: 'true',
+		    collapsible: 'true',
 			width: 270,
 			defaults: {
 				width: "100%",
-				layout: "fit"
+				layout: "fit",
+				height:130
 			},
-			items: [{
-				title: "Arbol de Capas",
+			items: [{				
 				id: "arbolCapas",
-				border: false,
-				flex: 1
+				height: 190
 				}, {
 				title: "Lugares cercanos a Usted",
 				id: "lugaresCercanos",
-				height: 320,
-				hidden: true,
+				height:353,
+				hidden: true,					
 				outputTarget: "lugaresCercanos"
 					}]
+			},
+			 {
+			id: "paneloeste",
+			title: "Detalle de Ruta",
+			xtype: "panel",
+			layout: "vbox",
+			region: "east",
+			split: 'true',
+			plain: 'false',
+		    collapsible: 'true',
+			collapsed: 'false',
+			width: 350,
+			defaults: {
+				width: "100%",
+				layout: "fit"
+			}
 			}],
         bbar: {id: "mybbar"}
     },
     
     // configuration of all tool plugins for this application
     tools: [{
-        ptype: "gxp_miarbol",
+        ptype: "gxp_layertree",
         outputConfig: {
             id: "tree",
             border: true,
