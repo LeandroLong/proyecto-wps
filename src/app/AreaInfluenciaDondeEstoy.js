@@ -296,7 +296,9 @@ var AreaInfluenciaDondeEstoy=Ext.extend(gxp.plugins.Tool,{
 						 //Crea un punto donde va a centrar el mapa una vez que dibuje la ruta
 						 var pixel = new OpenLayers.LonLat(puntoCentro.x,puntoCentro.y);
 						 //Centra el mapa al punto especificado
-						 this.app.mapPanel.map.moveTo(pixel,12 + (Math.round(Math.random()*4)),true);},'1000');
+						 this.app.mapPanel.map.moveTo(pixel,directionsDisplay.map.zoom+1,true);
+						 this.app.mapPanel.map.moveTo(pixel,directionsDisplay.map.zoom-2,true);
+						 },'700');
 					 		// create the data store
 								var store2 = new Ext.data.ArrayStore({
 									fields: [
